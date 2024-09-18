@@ -2,9 +2,9 @@
 
 ## Re-NotTiled-Server
 这是一个基于 WandMire 的 jar 重构的协作式开放服务包。
-它基于 Kryonet 技术。
+它基于 Kryonet 技术。  
 目前，该程序无法与 NotTiled 正常工作。
-我正在研究中，请期待下一次信息！
+我正在研究中，请期待下一次更新！
 
 ## 未来方向
 - [x] 反编译代码迁移
