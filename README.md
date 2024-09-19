@@ -21,6 +21,6 @@
 
 ## 如何使用
 1. 下载 IDEA 并克隆项目。
-2. 自动同步后，构建工件
+2. 自动同步后，构建工件（Build Artifact)
 3. 运行打包的jar，例如 java -jar Server.jar
-4. 通过 NotTiled 连接到服务器，实现合作（未实现）
+4. 通过 NotTiled 连接到服务器，实现合作
