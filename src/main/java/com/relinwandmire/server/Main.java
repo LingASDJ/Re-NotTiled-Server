@@ -249,7 +249,11 @@ public class Main {
             }
 
             server.start();
-            server.bind(port, 12467);
+
+            /**
+             *  UDP 和 NT自身的 MyGDXGame.java runClient方法中的 必须一致 否则就无法连接
+              */
+            server.bind(port, 23281);
             say("Server started on port :" + port);
             say("Listening on: " + getLocalIpAddress());
         } catch (Exception var2) {
