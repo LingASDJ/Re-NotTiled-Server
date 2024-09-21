@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 
+import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -24,10 +25,10 @@ public class Main {
 
     public Main() {}
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         say("Starting server...");
-        Log.set(LEVEL_TRACE);
-        server = new Server(9999999, 9999999);
+        server = new Server();
+        //server = new Server(99999999, 99999999);
         serverkryo = server.getKryo();
         serverkryo.register(TextChat.class);
         serverkryo.register(layerhistory.class);
@@ -210,6 +211,7 @@ public class Main {
                                 Main.activeClients.remove(flag);
                                 Main.say("[S] Client erased.");
                             }
+                        break;
                     }
                 } else if (object instanceof layerhistory) {
                     layerhistory response = (layerhistory)object;
@@ -232,34 +234,21 @@ public class Main {
     }
 
     private static void pushdata(packet lh) {
-        try {
-            server.sendToAllTCP(lh);
-        } catch (Exception var2) {
-            Exception e = var2;
-            e.printStackTrace();
-        }
-
+        server.sendToAllTCP(lh);
     }
 
-    private static void runServer(int port) {
-        try {
-            if (port <= 0) {
-                say("Please enter port number.");
-                return;
-            }
-
-            server.start();
-
-            /**
-             *  UDP 和 NT自身的 MyGDXGame.java runClient方法中的 必须一致 否则就无法连接
-              */
-            server.bind(port, 23281);
-            say("Server started on port :" + port);
-            say("Listening on: " + getLocalIpAddress());
-        } catch (Exception var2) {
-            Exception e = var2;
-            e.printStackTrace();
+    private static void runServer(int port) throws IOException {
+        if (port <= 0) {
+            say("Please enter port number.");
+            return;
         }
+        server.start();
+        /**
+         *  UDP 和 NT自身的 MyGDXGame.java runClient方法中的 必须一致 否则就无法连接
+         */
+        server.bind(port, 23281);
+        say("Server started on port :" + port);
+        say("Listening on: " + getLocalIpAddress());
 
     }
 
@@ -267,26 +256,20 @@ public class Main {
         System.out.println(text);
     }
 
-    public static String getLocalIpAddress() {
-        try {
-            Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
+    public static String getLocalIpAddress() throws SocketException {
+        Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
 
-            while(en.hasMoreElements()) {
-                NetworkInterface intf = en.nextElement();
-                Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses();
+        while(en.hasMoreElements()) {
+            NetworkInterface intf = en.nextElement();
+            Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses();
 
-                while(enumIpAddr.hasMoreElements()) {
-                    InetAddress inetAddress = enumIpAddr.nextElement();
-                    if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
-                        return inetAddress.getHostAddress();
-                    }
+            while(enumIpAddr.hasMoreElements()) {
+                InetAddress inetAddress = enumIpAddr.nextElement();
+                if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
+                    return inetAddress.getHostAddress();
                 }
             }
-        } catch (SocketException var4) {
-            SocketException ex = var4;
-            ex.printStackTrace();
         }
-
         return null;
     }
 }
