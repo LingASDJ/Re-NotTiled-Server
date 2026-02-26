@@ -29,11 +29,10 @@ dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 
-    implementation (group: 'kryonet', name: 'kryonet', version: '2.21') {
-        exclude group: 'com.esotericsoftware.reflectasm', module: 'reflectasm'
-        exclude group: 'com.esotericsoftware.minlog', module: 'minlog'
-    }
-    implementation group: 'com.esotericsoftware', name: 'kryo', version: '4.0.1'
+    // https://mvnrepository.com/artifact/com.esotericsoftware/kryo
+    implementation group: 'com.esotericsoftware', name: 'kryo', version: '5.6.0'
+    // https://mvnrepository.com/artifact/com.github.crykn/kryonet
+    implementation group: 'com.github.crykn', name: 'kryonet', version: '2.22.9'
 }
 
 
