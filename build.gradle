@@ -1,23 +1,54 @@
 plugins {
     id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 group = 'org.example'
 version = '1.0-SNAPSHOT'
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
 repositories {
-    mavenCentral()
+    //阿里云 Maven 镜像
+    maven { url 'https://maven.aliyun.com/repository/public/' }
+    maven { url 'https://maven.aliyun.com/repository/jcenter/' }
+    maven { url 'https://maven.aliyun.com/repository/gradle-plugin/' }
+
     maven { url 'https://jitpack.io' }
+    maven { url "https://repo.clojars.org/" }
+    maven { url "https://maven.sing-group.org/repository/maven/" }
+
+    mavenCentral()
 }
 
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
-    // https://mvnrepository.com/artifact/com.esotericsoftware/kryo
-    implementation group: 'com.esotericsoftware', name: 'kryo', version: '5.6.0'
-    // https://mvnrepository.com/artifact/com.github.crykn/kryonet
-    implementation group: 'com.github.crykn', name: 'kryonet', version: '2.22.9'
+
+    implementation (group: 'kryonet', name: 'kryonet', version: '2.21') {
+        exclude group: 'com.esotericsoftware.reflectasm', module: 'reflectasm'
+        exclude group: 'com.esotericsoftware.minlog', module: 'minlog'
+    }
+    implementation group: 'com.esotericsoftware', name: 'kryo', version: '4.0.1'
 }
+
+
+application {
+    mainClass = 'com.relinwandmire.server.Main'
+}
+
+
+shadowJar {
+    archiveBaseName = 'Re-NotTiled-Server'
+    archiveVersion = '1.0-SNAPSHOT'
+    archiveClassifier = 'all'
+}
+
+build.dependsOn shadowJar
 
 test {
     useJUnitPlatform()
